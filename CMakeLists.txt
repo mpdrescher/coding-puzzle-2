@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
-project(prog1 CXX)
+project(article CXX)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-set(prog1_SOURCE_TREE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(article_SOURCE_TREE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 include(Configure)
 
@@ -13,8 +13,8 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.53 COMPONENTS system filesystem REQUIRED)
 add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
-include_directories(${prog1_SOURCE_TREE} ${Boost_INCLUDE_DIRS})
-set(prog1_LINK_TARGETS ${Boost_LIBRARIES})
+include_directories(${article_SOURCE_TREE} ${Boost_INCLUDE_DIRS})
+set(article_LINK_TARGETS ${Boost_LIBRARIES})
 
 # Set-up testing.
 add_subdirectory(tools)
@@ -31,4 +31,4 @@ if(MSVC)
 endif()
 
 add_executable(tests test.cpp)
-target_link_libraries(tests ${GTEST_LIBRARIES} ${prog1_LINK_TARGETS})
+target_link_libraries(tests ${GTEST_LIBRARIES} ${article_LINK_TARGETS})
