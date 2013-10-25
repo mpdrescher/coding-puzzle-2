@@ -68,8 +68,15 @@ namespace article
                     // Combine
                     MapType::iterator it = pr.first;
 
-                    const std::string names = it->second.name + ", " + article->name;
-                    const double sum = it->second.price + article->price;
+                    std::string& names = it->second.name;
+                    if (std::search(names.begin(), names.end(),
+                            article->name.begin(), article->name.end())
+                            == names.end())
+                    {
+                        names = it->second.name + ", " + article->name;
+                    }
+
+                    double sum = it->second.price + article->price;
 
                     it->second = MapVal(names, sum);
                 }
