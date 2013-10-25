@@ -85,9 +85,6 @@ namespace tests
         const std::vector<Article> output = article::combine(input_);
         print(output, "actual:");
 
-        std::sort(input_.begin(), input_.end());
-        print(input_, "input sorted:");
-
         ASSERT_EQ(expected.size(), output.size());
         EXPECT_TRUE(std::equal(expected.begin(), expected.end(), output.begin(),
                     CompareArticle()));

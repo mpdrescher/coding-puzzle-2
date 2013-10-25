@@ -3,16 +3,15 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <iterator>
-#include <numeric>
-#include <functional>
+#include <map>
+#include <utility>
 
 
 namespace article
 {
-    struct Article
+    class Article
     {
+    public:
         std::string name;
         int group;
         double price;
@@ -26,61 +25,69 @@ namespace article
         {}
     };
 
-    inline bool operator==(const Article& lhs, const Article& rhs) // !
-    {
-        return lhs.group == rhs.group;
-    }
-
     inline bool operator<(const Article& lhs, const Article& rhs)
     {
         return lhs.group < rhs.group;
     }
 
-    std::ostream& operator<<(std::ostream& os, const Article& a)
+    inline std::ostream& operator<<(std::ostream& os, const Article& a)
     {
-        return os << "Article(" << a.name << "," << a.group << "," << a.price << ")";
+        return os <<
+            "Article('" << a.name << "', " << a.group << ", " << a.price << ")";
     }
 
-    namespace detail
+    class MapVal
     {
-        struct Combiner : public std::binary_function<Article, Article, Article>
-        {
-            Article operator()(const Article& lhs, const Article& rhs) const
-            {
-                const std::string name = lhs.name + ", " + rhs.name;
-                const double price = lhs.price + rhs.price;
-                return Article(name, lhs.group, price);
-            }
-        };
-    }
+    public:
+        std::string name;
+        double price;
 
-    inline std::vector<Article> combine(std::vector<Article> articles)
+        MapVal(const std::string& name_, double price_)
+            : name(name_), price(price_)
+        {}
+    };
+
+    typedef std::map<int, MapVal> MapType;
+
+    inline std::vector<Article> combine(const std::vector<Article>& articles)
     {
         std::vector<Article> res;
         res.reserve(articles.size());
-        std::sort(articles.begin(), articles.end());
 
-        for (std::vector<Article>::iterator it = articles.begin();
-                it != articles.end(); ++it)
+        MapType map;
+        for (std::vector<Article>::const_iterator article = articles.begin();
+                article != articles.end(); ++article)
         {
-            if (it->group != 0)
+            if (article->group != 0)
             {
-                const std::vector<Article>::iterator next
-                    = std::lower_bound(it, articles.end(), *it);
-//                std::cout << "-> lower bound" << *next << std::endl;
+                MapType::value_type val = std::make_pair(article->group,
+                        MapVal(article->name, article->price));
+                std::pair<MapType::iterator, bool> pr = map.insert(val);
+                if (!pr.second)
+                {
+                    // Combine
+                    MapType::iterator it = pr.first;
 
-                const Article combined = std::accumulate(it, next, *it,
-                        detail::Combiner());
+                    const std::string names = it->second.name + ", " + article->name;
+                    const double sum = it->second.price + article->price;
 
-                res.push_back(combined);
-                it = next; // !
+                    it->second = MapVal(names, sum);
+                }
             }
             else
             {
-                res.push_back(*it);
+                res.push_back(*article);
             }
         }
 
+        for (MapType::const_iterator it = map.begin(); it != map.end(); ++it)
+        {
+            res.push_back(
+                        Article(it->second.name, it->first, it->second.price)
+                    );
+        }
+
+        std::sort(res.begin(), res.end());
         return res;
     }
 }
