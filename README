@@ -1,0 +1,76 @@
+This is my second coding puzzle. I did this live during an interview session
+and failed miserably. However, after I left, I sat down at a local Starbucks
+and erased my pathetic first attempt and started over. This is where I got.
+
+
+				 Coding Puzzle
+				 =============
+
+(Note: the task was given in German language. This is my translation.)
+
+
+Part I.)
+Given following class:
+
+    class Article
+    {
+    public:
+        std::string name;
+        int group;
+        double price;
+    };
+
+Write a function which takes a list of articles. This function should then
+return a new list which combines all articles within the same group.
+Additionally, the prices of each article in that group should be represented as
+sum and all article names should appear as comma-separated list whereas no
+article name should be repeated in that list.
+
+An exception to the rule above are articles within article group 0: These
+articles should not combined. Ideally, the returned list is sorted by group.
+
+Example input:
+
+Name | Group | Price
+_____________________
+AA   | 1     | 100.00
+BB   | 1     |  50.00
+CC   | 2     |  75.00
+AA   | 1     |  20.00
+AA   | 0     | 100.00
+BB   | 2     |  75.00
+CC   | 2     |  80.00
+AA   | 0     |  20.00
+
+Output:
+
+Name   | Group | Price
+_______________________
+AA     | 0     | 100.00
+AA     | 0     |  20.00
+AA, BB | 1     | 170.00
+CC, BB | 2     | 230.00
+
+
+Part II.)
+Now, if all article groups can contain articles, how would you change your
+program to allow also articles to contain other articles. Describe and discuss a
+possible solution.
+
+Limitations
+- C++98 only
+- you have about three hours time for your solution
+- everything else is in your hands
+
+
+				    Solution
+				    ========
+
+You can see my progress in the git log. I did not make it in time. I guess, I
+got too nervous somewhere in between.
+
+My final take on this was (after a hint of one of the interviewers) using a
+std::map along with it's insert() function. Algorithmically, inserts are
+O(N log N). However, more important, insert() returns a std:pair whose second
+component denotes whether the element was actually inserted or not.
+
