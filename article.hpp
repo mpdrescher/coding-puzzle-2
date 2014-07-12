@@ -6,7 +6,6 @@
 #include <map>
 #include <utility>
 
-
 namespace article
 {
     class Article
@@ -16,13 +15,12 @@ namespace article
         int group;
         double price;
 
-        Article()
-            : name(), group(0), price(0.0)
-        {}
+        Article() : name(), group(0), price(0.0) {}
 
         Article(const std::string& name_, int group_, double price_)
             : name(name_), group(group_), price(price_)
-        {}
+        {
+        }
     };
 
     inline bool operator<(const Article& lhs, const Article& rhs)
@@ -32,8 +30,8 @@ namespace article
 
     inline std::ostream& operator<<(std::ostream& os, const Article& a)
     {
-        return os <<
-            "Article('" << a.name << "', " << a.group << ", " << a.price << ")";
+        return os << "Article('" << a.name << "', " << a.group << ", "
+                  << a.price << ")";
     }
 
     class MapVal
@@ -44,7 +42,8 @@ namespace article
 
         MapVal(const std::string& name_, double price_)
             : name(name_), price(price_)
-        {}
+        {
+        }
     };
 
     typedef std::map<int, MapVal> MapType;
@@ -56,12 +55,12 @@ namespace article
 
         MapType map;
         for (std::vector<Article>::const_iterator article = articles.begin();
-                article != articles.end(); ++article)
+             article != articles.end(); ++article)
         {
             if (article->group != 0)
             {
-                MapType::value_type val = std::make_pair(article->group,
-                        MapVal(article->name, article->price));
+                MapType::value_type val = std::make_pair(
+                    article->group, MapVal(article->name, article->price));
                 std::pair<MapType::iterator, bool> pr = map.insert(val);
                 if (!pr.second)
                 {
@@ -70,8 +69,8 @@ namespace article
 
                     std::string& names = it->second.name;
                     if (std::search(names.begin(), names.end(),
-                            article->name.begin(), article->name.end())
-                            == names.end())
+                                    article->name.begin(),
+                                    article->name.end()) == names.end())
                     {
                         names = it->second.name + ", " + article->name;
                     }
@@ -90,8 +89,7 @@ namespace article
         for (MapType::const_iterator it = map.begin(); it != map.end(); ++it)
         {
             res.push_back(
-                        Article(it->second.name, it->first, it->second.price)
-                    );
+                Article(it->second.name, it->first, it->second.price));
         }
 
         std::sort(res.begin(), res.end());
@@ -100,4 +98,3 @@ namespace article
 }
 
 #endif // ARTICLE_HPP
-

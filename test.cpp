@@ -56,8 +56,7 @@ namespace tests
         }
     };
 
-    template<typename T>
-    inline void print(const T& cont, const char* msg)
+    template <typename T> inline void print(const T& cont, const char* msg)
     {
 #ifdef PRINT
         std::cout << msg << std::endl;
@@ -67,8 +66,8 @@ namespace tests
             std::cout << *it << std::endl;
         }
 #else
-        (void) cont; // No-op
-        (void) msg;
+        (void)cont; // No-op
+        (void)msg;
 #endif
     }
 
@@ -87,7 +86,6 @@ namespace tests
 
         ASSERT_EQ(expected.size(), output.size());
         EXPECT_TRUE(std::equal(expected.begin(), expected.end(), output.begin(),
-                    CompareArticle()));
+                               CompareArticle()));
     }
 }
-
